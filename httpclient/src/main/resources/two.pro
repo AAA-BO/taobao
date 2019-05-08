@@ -1,0 +1,9 @@
+Host: shop126028681.taobao.com
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+Referer: https://shop126028681.taobao.com/search.htm?orderType=&viewType=grid&keyword=&lowPrice=&highPrice=
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: thw=cn; cna=3hE/FVhyc0sCAW/GYrr/EiQg; t=e538266eb7ffac399f89c15d8a717993; tg=0; hng=CN%7Czh-CN%7CCNY%7C156; UM_distinctid=16a453c012e889-0d23866ac6cba6-454c092b-1fa400-16a453c012f3d4; x=e%3D1%26p%3D*%26s%3D0%26c%3D0%26f%3D0%26g%3D0%26t%3D0; tracknick=adasad12; lgc=adasad12; mt=ci=10_1&np=; enc=sS7o%2BR5CKcebALyCVp%2BOh7Jd38D%2FM5X9ldHEPTDSmLgSpzyyudFiBieGXnQLJHo0adA7X1Pfy9xOQGszT30r9Q%3D%3D; _m_h5_tk=44e017e09fdb79e418da4b6c6d88b809_1557290357221; _m_h5_tk_enc=d3e98fcceb5bf137e0b757c2ddfe0a67; v=0; cookie2=183d0f836d1e829cdba5c4f7f87db49f; _tb_token_=f6765731553ef; skt=11926049654102c1; csg=7fdf5863; uc3=vt3=F8dByEa%2FxGVfINdTvLo%3D&id2=UU2y9yEpekrsEQ%3D%3D&nk2=AnWaC4gmaz0%3D&lg2=VFC%2FuZ9ayeYq2g%3D%3D; existShop=MTU1NzI4NjczNw%3D%3D; _cc_=U%2BGCWk%2F7og%3D%3D; dnk=adasad12; uc1=cookie14=UoTZ48eDUV%2F0iA%3D%3D&lng=zh_CN&cookie16=VFC%2FuZ9az08KUQ56dCrZDlbNdA%3D%3D&existShop=true&cookie21=V32FPkk%2Fhodroid0QSjisQ%3D%3D&tag=8&cookie15=Vq8l%2BKCLz3%2F65A%3D%3D&pas=0; pnm_cku822=098%23E1hvLQvUvbpvUvCkvvvvvjiPRLSUtj3bRsdy1j1VPmPOAjtRn2zZ6jYWR2zvtjrmRphvCvvvvvvPvpvhvv2MMgyCvvOUvvVvay7ivpvUvvmvnaZ%2FDH4tvpvIvvvvvhCvvvvvvUnvphvWx9vv96CvpC29vvm2phCvhhvvvUnvphvppvyCvhQpp%2FZvCsjIAXcBKFyK2uc6D70Xd5YUgW2hTEkOJh2p%2BneYr2E9ZRAn3w0AhjHVTWex6fItb9Txfa3l5FUSLn7lDfyTHAnBDOcBD4U0vphvC9vhvvCvp8wCvvpvvUmm; isg=BMzMn9MF_M1L3OhbjNNmyt5enSo-rXC23QY6cCaN7ncasW27TxBTPjdDVfks-agH; l=bBQh_3euv3_bspgDBOCiquI8aA_tpIRfguPRwNVwi_5ZJ1TshI7OlK7M6e96Vj5P9E8p4KzBhYpTvUD08yDf.
