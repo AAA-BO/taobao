@@ -1,4 +1,5 @@
 import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -18,22 +19,23 @@ public class Main {
     private CloseableHttpClient httpClient = HttpClientBuilder.create().build();//两个方法中不会同时使用该属性，所以可以定义在此
 
     // 一级搜索
-    private final String oneKeyword = "森马";//一级搜索关键词
-    private final String liexing = "3";//店铺类型 所有(1) 天猫(2) 淘宝(3) 淘宝分级(4)
-    private final Boolean isTMFlagship = true;//天猫是否只查找旗舰店 在"1-所有" "2-天猫" 模式下有效
-    private final String jibie = "jin";//淘宝店级别 金冠(jin) 皇冠(huang) 钻级(zhuan) 心级(xin)
-    private final Integer onePageNo = 1;//一级搜索页数
+    private final String oneKeyword = "开发智力玩具";//一级搜索关键词
+    private final String liexing = "4";//店铺类型 所有(1) 天猫(2) 淘宝(3) 淘宝分级(4)
+    private final Boolean isTMFlagship = false;//天猫是否只查找旗舰店 在"1-所有" "2-天猫" 模式下有效
+    private final String jibie = "huang";//淘宝店级别 金冠(jin) 皇冠(huang) 钻级(zhuan) 心级(xin)
+    private final Integer onePageNo = 10;//一级搜索页数
     private Collection<Map<String, String>> dpInfoList = null;//一级搜索获取到的所有店铺的相关信息
     private final String oneFileName = "one.pro";
     private HashMap<String, String> oneHeadDataMap = new HashMap<>();
     private String oneUrl = null;//一级搜索请求URL
 
     // 二级搜索
-    private final String twoKeyword = "";//二级搜索关键词
+    private final String twoKeyword = "智力";//二级搜索关键词
     private Collection<String> spUrlList = new ArrayList<>();//二级搜索获取到的该店铺中的所有商品的链接
-    private final Integer twoPageNo = 10;// 二级搜索页数
-    private final Integer minPrice = 0;
-    private final Integer maxPrice = 999999;
+    private final Integer beginPageNo = 1;// 二级搜索页数
+    private final Integer searchPageNo = 1000;// 二级搜索页数
+    private final Integer minPrice = 20;
+    private final Integer maxPrice = 200;
     private final String tbOrderType = "coefp_desc"; // 淘宝店铺排序方式：综合排序-coefp_desc  销量-hotsell_desc 新品-newOn_desc 收藏-hotkeep_desc 价格升序-price_asc 价格降序-price_desc
     private final String tmOrderType = "defaultSort"; // 天猫店铺排序方式：默认排序-defaultSort 销量-hotsell_desc 新品-newOn_desc 收藏-hotkeep_desc 价格升序-price_asc 价格降序-price_desc 口碑-koubei
     private final String twoFileName = "two.pro";
@@ -107,7 +109,7 @@ public class Main {
         new Main().begin();
     }
 
-    private void begin() throws Exception{
+    private void begin() throws Exception {
         searchDpUrl();
         searchSpUrl();
     }
@@ -131,7 +133,7 @@ public class Main {
                 response = httpClient.execute(httpGet);
                 HttpEntity responseEntity = response.getEntity();
                 if (responseEntity != null) {
-                    System.out.println(response.getStatusLine().getStatusCode());
+//                    System.out.println(response.getStatusLine().getStatusCode());
                     if (response.getStatusLine().getStatusCode() == 200) {
                         // 获取响应数据 并去除换行空格等空白字符
                         String string = EntityUtils.toString(responseEntity);
@@ -141,6 +143,7 @@ public class Main {
                         Iterator<Map<String, String>> iterator = dpInfoList.iterator();
                         while (iterator.hasNext()) {
                             Map<String, String> dpInfoMap = iterator.next();
+//                            System.out.println(dpInfoMap.get("dpUrl"));
                             if (isTMFlagship) {// 针对天猫店铺只获取旗舰店
                                 if ("1".equals(liexing) || "2".equals(liexing)) {
                                     if (dpInfoMap.get("dpType").equals("tm")) { // 为天猫店铺
@@ -154,7 +157,7 @@ public class Main {
                                         //System.out.println("淘宝店铺");
                                     }
                                     // 获取店铺首页链接
-                                    System.out.println("https://" + dpInfoMap.get("dpUrl"));
+//                                    System.out.println("https://" + dpInfoMap.get("dpUrl"));
                                 }
                             }
                         }
@@ -166,13 +169,13 @@ public class Main {
                 }
             }
             // ---END 页数for循环
-            System.out.printf("log:\t\t店铺搜索关键词:%s\t店铺级别:%s\t搜索页数:%d\t共找到:%d个店铺链接\n\n\n", oneKeyword, jibie, onePageNo, dpInfoList.size());
-        } catch ( Exception e) {
+//            System.out.printf("log:\t\t店铺搜索关键词:%s\t店铺级别:%s\t搜索页数:%d\t共找到:%d个店铺链接\n\n\n", oneKeyword, jibie, onePageNo, dpInfoList.size());
+        } catch (Exception e) {
             throw e;
         } finally {
             try {
                 if (httpClient != null) {
-                    httpClient.close();
+//                    httpClient.close();
                 }
                 if (response != null) {
                     response.close();
@@ -182,7 +185,6 @@ public class Main {
             }
         }
     }
-
 
 
     /**
@@ -197,10 +199,10 @@ public class Main {
             // 遍历所有店铺
             for (Map<String, String> dpInfoMap : dpInfoList) {
                 // 替换URL参数，传入店铺信息，用于动态构建url地址、排序方式param
-                String url = replaceTwoUrl(twoUrl,dpInfoMap);
-                Integer allPageNo = 1;//总页数
+                String url = replaceTwoUrl(twoUrl, dpInfoMap);
+                Integer allPageNo = beginPageNo+1;//总页数
                 // 根据商品页数循环获取每页商品
-                for (int pageNo = 1; pageNo <= allPageNo; pageNo++) {
+                for (int pageNo = beginPageNo; pageNo <= allPageNo; pageNo++) {
                     HttpGet httpGet = new HttpGet(url + "&pageNo=" + pageNo);
                     // 设置请求头信息
                     buildHeaderByMap(httpGet, twoHeadDataMap);
@@ -209,15 +211,14 @@ public class Main {
                     if (responseEntity != null) {
                         if (response.getStatusLine().getStatusCode() == 200) {
                             String bodyString = EntityUtils.toString(responseEntity).replaceAll("\\s|\\n|\\t", "");
-
                             // 获取第一页数据时，找下总页数
-                            if (pageNo == 1) {
-                                Matcher matcher = Pattern.compile("(page-info.*?/)(\\d)").matcher(bodyString);
+                            if (pageNo == beginPageNo) {
+                                Matcher matcher = Pattern.compile("(page-info.*?/)(\\d+?)<").matcher(bodyString);
                                 if (matcher.find()) {
                                     allPageNo = Integer.valueOf(matcher.group(2));
                                     // 如果二级搜索设置总页数小于实际总页数，表示不用搜索所有页
-                                    if(twoPageNo < allPageNo) {
-                                        allPageNo = twoPageNo;
+                                    if (searchPageNo < allPageNo) {
+                                        allPageNo = searchPageNo;
                                     }
                                 }
                             }
@@ -236,7 +237,7 @@ public class Main {
                         response.close();
                     }
                 }
-                System.out.printf("log:\t\t店铺链接:%s\t店铺搜索关键词:%s\t价格范围:%d-%d\t实际搜索页数:%d\t累计共找到:%d个商品链接\n\n", twoUrl, twoKeyword, minPrice, maxPrice, allPageNo, spUrlList.size());
+//                System.out.printf("log:\t\t店铺链接:%s\t店铺搜索关键词:%s\t价格范围:%d-%d\t实际搜索页数:%d\t累计共找到:%d个商品链接\n\n", twoUrl, twoKeyword, minPrice, maxPrice, allPageNo, spUrlList.size());
             }
             // ---END 页数for循环
         } catch (Exception e) {
@@ -265,7 +266,7 @@ public class Main {
     // 根据一级搜索配置的条件，更换URL中的参数
     private String replaceOneUrl(String url) throws Exception {
         Map<String, String> map = new HashMap<>();
-        map.put("q",URLEncoder.encode(oneKeyword, "utf-8"));
+        map.put("q", URLEncoder.encode(oneKeyword, "utf-8"));
         switch (liexing) { //店铺类型 所有(1) 天猫(2) 淘宝(3) 淘宝分级(4)
             case "1":
                 map.put("data-key", "shop_type%2Cisb%2Cratesum");
@@ -303,27 +304,53 @@ public class Main {
     private String replaceTwoUrl(String url, Map<String, String> dpDataMap) throws Exception {
         String dpUrl = dpDataMap.get("dpUrl");
         String dpType = dpDataMap.get("dpType");
-        if("tm".equals(dpType)) {//天猫店铺需获取真正的店铺URL
-            // 判断域名是否属于天猫
-            dpUrl.
-
+        if ("tm".equals(dpType)) {//天猫店铺需获取真正的店铺URL
+            dpUrl = transformUrlTbToTm(dpUrl);
+            // 记录转换后的URL到dpDataMap
+            dpDataMap.put("dpUrl", dpUrl);
         }
-        // 替换要搜索店铺的URL
 
-        url = url.replaceFirst("https://\\S+?.com",dpUrl);
+        // 替换要搜索店铺的URL
+        url = url.replaceFirst("https://\\S+?.com", dpUrl);
 
         // 替换请求参数
+        // TODO 检查需要替换的参数
         Map<String, String> map = new HashMap<>();
-        map.put("keyword",URLEncoder.encode(oneKeyword, "gb2312"));
+
+        map.put("keyword", URLEncoder.encode(twoKeyword, "gb2312"));
         map.put("lowPrice", String.valueOf(minPrice));
         map.put("highPrice", String.valueOf(maxPrice));
         // 排序参数是一个key根据店铺类型的不同设置不同的
-        if("tb".equals(dpType)) {
+        if ("tb".equals(dpType)) {
             map.put("orderType", tbOrderType);
-        }else if("tm".equals(dpType)) {
+        } else if ("tm".equals(dpType)) {
             map.put("orderType", tmOrderType);
         }
         return addOrReplaceUrlParam(url, map);
+    }
+
+    // 将天猫店铺的淘宝URL转换为天猫URL（商品数据时从天猫URL中获取的）
+    private String transformUrlTbToTm(String dpUrl) throws Exception {
+        // 判断域名是否属于天猫
+        if (false) { // 属于天猫说明该URL已经被转换过了
+            return dpUrl;
+        }
+        // 请求该URL，解析响应数据获取转换结果
+        CloseableHttpResponse response = null;
+        HttpGet httpGet = new HttpGet(dpUrl);
+        // 设置请求头信息
+        try {
+            response = httpClient.execute(httpGet);
+        } catch (ClientProtocolException e) {
+            String errorMsg = e.getCause().getMessage();
+            errorMsg = errorMsg.replaceAll("\\s|\\n|\\t", "");
+
+            Matcher matcher = Pattern.compile("https://\\S+?.com").matcher(errorMsg);
+            if (matcher.find()) {
+                return matcher.group(0);
+            }
+        }
+        return dpUrl;
     }
 
     // 处理请求参数，将Url中给定的pName设置成pValue，Url中不存在pName时，为其添加
@@ -344,7 +371,7 @@ public class Main {
                 }
             }
         }
-        return url.endsWith("&")?url.substring(0,url.length()-1):url;
+        return url.endsWith("&") ? url.substring(0, url.length() - 1) : url;
     }
 
     // 获取店铺类型(tm tb)、店铺名、旺旺名、店铺首页URL
@@ -365,11 +392,11 @@ public class Main {
             // 店铺首页URL
             String dpUrl = matcher.group(3);
 //            System.out.println("店铺页URL\t" + dpUrl);
-            map.put("dpUrl", "https://"+dpUrl);
+            map.put("dpUrl", "https://" + dpUrl);
             String dpType = matcher.group(4);
-            if(dpType.contains("\"title\":\"天猫\"")) {
+            if (dpType.contains("\"title\":\"天猫\"")) {
                 map.put("dpType", "tm");
-            }else {
+            } else {
                 map.put("dpType", "tb");
             }
 //            System.out.println("店铺类型\t" + dpType);
