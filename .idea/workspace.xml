@@ -16,19 +16,28 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/httpclient/src/main/java/Main.java">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="204">
               <caret line="352" selection-start-line="352" selection-end-line="352" />
+=======
+            <state relative-caret-position="234">
+              <caret line="283" column="29" lean-forward="true" selection-start-line="283" selection-start-column="29" selection-end-line="283" selection-end-column="29" />
+>>>>>>> a3c307b243d0da4fd66bfc82792df34cbfdfe557
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#Main#0;class#Main#0" />
                 <element signature="method#main#0;class#Main#0" />
                 <element signature="method#begin#0;class#Main#0" />
+<<<<<<< HEAD
                 <element signature="method#buildHeaderByMap#0;class#Main#0" />
                 <element signature="method#replaceOneUrl#0;class#Main#0" />
                 <element signature="method#replaceTwoUrl#0;class#Main#0" />
                 <element signature="method#transformUrlTbToTm#0;class#Main#0" />
                 <element signature="method#addOrReplaceUrlParam#0;class#Main#0" />
                 <element signature="method#getAllDpInfo#0;class#Main#0" />
+=======
+                <element signature="method#searchDpUrl#0;class#Main#0" />
+>>>>>>> a3c307b243d0da4fd66bfc82792df34cbfdfe557
                 <element signature="e#20118#20134#0" expanded="true" />
               </folding>
             </state>
@@ -38,7 +47,11 @@
       <file leaf-file-name="log4j.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/httpclient/src/main/resources/log4j.xml">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="673">
+=======
+            <state relative-caret-position="408">
+>>>>>>> a3c307b243d0da4fd66bfc82792df34cbfdfe557
               <caret line="58" column="27" selection-start-line="58" selection-start-column="27" selection-end-line="58" selection-end-column="27" />
             </state>
           </provider>
@@ -47,8 +60,13 @@
       <file leaf-file-name="one.pro" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/httpclient/src/main/resources/one.pro">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="19">
               <caret line="1" selection-start-line="1" selection-end-line="1" />
+=======
+            <state relative-caret-position="190">
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
+>>>>>>> a3c307b243d0da4fd66bfc82792df34cbfdfe557
             </state>
           </provider>
         </entry>
@@ -67,6 +85,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="95">
               <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="three.pro" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/httpclient/src/main/resources/three.pro">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="190">
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
             </state>
           </provider>
         </entry>
@@ -141,6 +168,7 @@
         <option value="$PROJECT_DIR$/httpclient/src/main/java/HttpClientTest.java" />
         <option value="$PROJECT_DIR$/httpclient/pom.xml" />
         <option value="$PROJECT_DIR$/httpclient/src/log4j.xml" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/httpclient/src/main/java/test.html" />
         <option value="$PROJECT_DIR$/regexp/src/RegexpTest.java" />
         <option value="$PROJECT_DIR$/httpclient/src/main/resources/log4j.xml" />
@@ -148,6 +176,15 @@
         <option value="$PROJECT_DIR$/httpclient/src/main/resources/one.pro" />
         <option value="$PROJECT_DIR$/httpclient/src/main/resources/two.pro" />
         <option value="$PROJECT_DIR$/httpclient/src/main/resources/three.pro" />
+=======
+        <option value="$PROJECT_DIR$/httpclient/src/main/resources/log4j.xml" />
+        <option value="$PROJECT_DIR$/httpclient/src/main/java/test.html" />
+        <option value="$PROJECT_DIR$/httpclient/src/main/resources/one.pro" />
+        <option value="$PROJECT_DIR$/httpclient/src/main/resources/two.pro" />
+        <option value="$PROJECT_DIR$/httpclient/src/main/resources/three.pro" />
+        <option value="$PROJECT_DIR$/regexp/src/RegexpTest.java" />
+        <option value="$PROJECT_DIR$/httpclient/src/main/java/Main.java" />
+>>>>>>> a3c307b243d0da4fd66bfc82792df34cbfdfe557
       </list>
     </option>
   </component>
@@ -395,12 +432,20 @@
       <workItem from="1556674973034" duration="1083000" />
       <workItem from="1557221089668" duration="35462000" />
       <workItem from="1557478436546" duration="7288000" />
+<<<<<<< HEAD
       <workItem from="1557711494731" duration="38166000" />
+=======
+      <workItem from="1557711494731" duration="19937000" />
+>>>>>>> a3c307b243d0da4fd66bfc82792df34cbfdfe557
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="126947000" />
+=======
+    <option name="totallyTimeSpent" value="108718000" />
+>>>>>>> a3c307b243d0da4fd66bfc82792df34cbfdfe557
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
@@ -463,7 +508,11 @@
       <window_info anchor="bottom" id="Version Control" order="9" show_stripe_button="false" />
       <window_info anchor="right" id="Maven Projects" order="8" weight="0.32995737" />
       <window_info anchor="bottom" id="Find" order="3" weight="0.32972974" />
+<<<<<<< HEAD
       <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4976378" weight="0.19936034" />
+=======
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4976378" visible="true" weight="0.19936034" />
+>>>>>>> a3c307b243d0da4fd66bfc82792df34cbfdfe557
       <window_info id="Learn" order="3" weight="0.32995737" />
       <window_info anchor="right" id="Database" order="7" />
       <window_info anchor="bottom" id="Message" order="1" />
@@ -504,7 +553,11 @@
           <option name="timeStamp" value="114" />
         </line-breakpoint>
       </breakpoints>
+<<<<<<< HEAD
       <option name="time" value="115" />
+=======
+      <option name="time" value="66" />
+>>>>>>> a3c307b243d0da4fd66bfc82792df34cbfdfe557
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -824,6 +877,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/regexp/src/RegexpTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76">
@@ -842,13 +896,38 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="369">
           <caret line="64" selection-start-line="64" selection-end-line="64" />
+=======
+    <entry file="file://$PROJECT_DIR$/httpclient/src/main/resources/log4j.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="58" column="27" selection-start-line="58" selection-start-column="27" selection-end-line="58" selection-end-column="27" />
+>>>>>>> a3c307b243d0da4fd66bfc82792df34cbfdfe557
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/httpclient/src/main/resources/one.pro">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="19">
           <caret line="1" selection-start-line="1" selection-end-line="1" />
+=======
+        <state relative-caret-position="190">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/httpclient/src/main/resources/three.pro">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/regexp/src/RegexpTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="5" column="23" selection-start-line="5" selection-start-column="23" selection-end-line="5" selection-end-column="23" />
+>>>>>>> a3c307b243d0da4fd66bfc82792df34cbfdfe557
         </state>
       </provider>
     </entry>
@@ -868,19 +947,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/httpclient/src/main/java/Main.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="204">
           <caret line="352" selection-start-line="352" selection-end-line="352" />
+=======
+        <state relative-caret-position="234">
+          <caret line="283" column="29" lean-forward="true" selection-start-line="283" selection-start-column="29" selection-end-line="283" selection-end-column="29" />
+>>>>>>> a3c307b243d0da4fd66bfc82792df34cbfdfe557
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#Main#0;class#Main#0" />
             <element signature="method#main#0;class#Main#0" />
             <element signature="method#begin#0;class#Main#0" />
+<<<<<<< HEAD
             <element signature="method#buildHeaderByMap#0;class#Main#0" />
             <element signature="method#replaceOneUrl#0;class#Main#0" />
             <element signature="method#replaceTwoUrl#0;class#Main#0" />
             <element signature="method#transformUrlTbToTm#0;class#Main#0" />
             <element signature="method#addOrReplaceUrlParam#0;class#Main#0" />
             <element signature="method#getAllDpInfo#0;class#Main#0" />
+=======
+            <element signature="method#searchDpUrl#0;class#Main#0" />
+>>>>>>> a3c307b243d0da4fd66bfc82792df34cbfdfe557
             <element signature="e#20118#20134#0" expanded="true" />
           </folding>
         </state>
