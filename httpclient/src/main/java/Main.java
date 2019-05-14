@@ -7,7 +7,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
-import org.apache.log4j.xml.DOMConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +26,7 @@ public class Main {
     private CloseableHttpClient httpClient = HttpClientBuilder.create().build();//两个方法中不会同时使用该属性，所以可以定义在此
 
     // 一级搜索
-    private final String oneKeyword = "开发智力玩具";//一级搜索关键词
+    private final String oneKeyword = "积木";//一级搜索关键词
     private final String liexing = "4";//店铺类型 所有(1) 天猫(2) 淘宝(3) 淘宝分级(4)
     private final Boolean isTMFlagship = false;//天猫是否只查找旗舰店 在"1-所有" "2-天猫" 模式下有效
     private final String jibie = "huang";//淘宝店级别 金冠(jin) 皇冠(huang) 钻级(zhuan) 心级(xin)
@@ -38,9 +37,9 @@ public class Main {
     private String oneUrl = null;//一级搜索请求URL
 
     // 二级搜索
-    private final String twoKeyword = "玩具";//二级搜索关键词
-    private Collection<String> spUrlList = new ArrayList<>();//二级搜索获取到的该店铺中的所有商品的链接
-    private final Integer beginPageNo = 1;// 二级搜索 从那一页开始搜
+    private final String twoKeyword = "颗粒";//二级搜索关键词
+    private Collection<Map<String,String>> spInfoList_all = new ArrayList<>();//二级搜索获取到的该店铺中的所有商品的链接
+    //    private final Integer beginPageNo = 1;// 二级搜索 从那一页开始搜
     private final Integer searchPageNo = 1000;// 二级搜索页数
     private final Integer minPrice = 20;
     private final Integer maxPrice = 200;
@@ -55,10 +54,9 @@ public class Main {
     private HashMap<String, String> threeHeadDataMap = new HashMap<>();
     private String threeUrl = null;
     private final String threeSort = "sale-desc";
-
-    private final Double multiple = 1.5;//最小倍数 // 按销量排序 价格范围为 原价*1.5 - 原价*1.5*10
-    private final int passNo = 5;// 查询到的商品有3个就通过
-    private final int failPercent = 33; // 在搜索到的商品中，若有33%被舍弃，该店铺就被舍弃
+    private final Double multiple = 1.3;//最小倍数 // 按销量排序 价格范围为 原价*1.5 - 原价*1.5*10
+    private final int passNo = 3;// 查询到的商品有3个就通过
+    private final int failPercent = 50; // 在搜索到的商品中，若有33%被舍弃，该店铺就被舍弃
 
 
     public Main() throws Exception {
@@ -217,18 +215,13 @@ public class Main {
             for (Map<String, String> dpInfoMap : dpInfoList) {
                 // >>>>>>开始查询某一个店铺中的商品
 
-                // 临时List，用于支持实现排除店铺的逻辑
-                Collection<String> spUrlList_temp = new ArrayList<>();
-                Integer failNo = 9999;//当排除数量达到该值时，该店铺被排除
-                Integer failNo_reality = 0;//实际已经排除的值
-
                 // 替换URL参数，传入店铺信息，用于动态构建url地址、排序方式param
                 String url = replaceTwoUrl(twoUrl, dpInfoMap);
-                Integer allPageNo = beginPageNo;//总页数，默认为开始页数
 
-                Boolean isBreak = false;//是否break，用于跳出多层循环
+                Integer realityPageNo = 1;//实际查询的总页数。可能搜索到100，单只取50；或者想要50，但只搜到20页。
+                List<Map<String,String>> spInfoList = new ArrayList<>();
                 // 根据商品页数循环获取每页商品
-                for (int pageNo = beginPageNo; !isBreak && pageNo <= allPageNo; pageNo++) {
+                for (int pageNo = 1; pageNo <= realityPageNo; pageNo++) {
                     HttpGet httpGet = new HttpGet(url + "&pageNo=" + pageNo);
                     // 设置请求头信息
                     buildHeaderByMap(httpGet, twoHeadDataMap);
@@ -237,50 +230,43 @@ public class Main {
                     if (responseEntity != null) {
                         if (response.getStatusLine().getStatusCode() == 200) {
                             String bodyString = EntityUtils.toString(responseEntity).replaceAll("\\s|\\n|\\t", "");
-                            // 去除推荐商品 淘宝搜索不到时会出现，天猫一直都有
-                            bodyString = bodyString.replaceAll("((其他人还购买了)|(本店内推荐))[\\s\\S]*","");
-                            // 获取第一页数据时，找下总页数、搜到商品的总数、并根据搜到商品的总数+舍弃率计算店铺舍弃数量
-                            if (pageNo == beginPageNo) {
-                                // 搜索到商品总数的计算逻辑为：(总页数-1)*每页条数 + 每页条数*0.5
-                                Matcher matcher = Pattern.compile("共搜索到<span>(\\d+?)</span>个符合条件的商品.*?page-info.*?/(\\d+?)<").matcher(bodyString);
+                            // 去除推荐商品（淘宝搜索不到时会出现，天猫一直都有）
+                            bodyString = bodyString.replaceAll("((其他人还购买了)|(本店内推荐))[\\s\\S]*", "");
+                            // 获取第一页数据时，找下总页数
+                            if (pageNo == 1) {
+                                // 获取搜到的总页数，淘宝天猫获取的方式不同
+                                Matcher matcher = Pattern.compile("(page-info.*?/(\\d+?)<)|(ui-page-s-len.*?/(\\d+?)<)").matcher(bodyString);
                                 if (matcher.find()) {
-                                    Integer allSpNo = Integer.valueOf(matcher.group(1));//搜索到的商品数
-                                    // 去掉前面排除页的商品数
-
-                                    // TODO
-                                    // 计算当排除数
-                                    failNo = allSpNo * failPercent;
-
-                                    allPageNo = Integer.valueOf(matcher.group(2));//获取总页数
-                                    // 如果二级搜索设置总页数小于实际总页数，表示不用搜索所有页
-                                    if (searchPageNo < allPageNo) {
-                                        allPageNo = searchPageNo;
+                                    if (matcher.group(2) != null) {
+                                        realityPageNo = Integer.valueOf(matcher.group(2));
+                                    } else if (matcher.group(4) != null) {
+                                        realityPageNo = Integer.valueOf(matcher.group(4));
+                                    }
+                                    // 如果要搜索的页数，小于搜到的总页数，则使用要搜索的页数
+                                    if (searchPageNo < realityPageNo) {
+                                        realityPageNo = searchPageNo;
                                     }
                                 }
                             }
-
-                            // 先处理淘宝
-                            Matcher matcher = Pattern.compile("imgalt=\\\\\"(\\S+?)<spanclass=H>(\\S+?)</span>(\\S+?)\\\\\"\\S+?\\\\\"item-name.+?(item.taobao.com/item.htm\\?id=\\d*).+?c-price\\\\\">(\\d*)").matcher(bodyString);
+                            //获取当前页的所有链接、商品全标题，价格（淘宝天猫的获取方式不同），并将链接加入list
+                            String rstr_tb =  "imgalt=\\\\\\\"(\\S+?)\\\\\\\".*?(item\\.taobao\\.com/item\\.htm\\?id=\\d+).*?c-price\\\\\\\">(\\d+)";
+                            String rstr_tm =  "imgalt=\\\\\\\"(\\S+?)\\\\\\\".*?(detail\\.tmall\\.com/item\\.htm\\?id=\\d+).*?c-price\\\\\\\">(\\d+)";
+                            Matcher matcher = null;
+                            if("tb".equals(dpInfoMap.get("dpType"))) {
+                                matcher =  Pattern.compile(rstr_tb).matcher(bodyString);
+                            }else if("tm".equals(dpInfoMap.get("dpType"))) {
+                                matcher =  Pattern.compile(rstr_tm).matcher(bodyString);
+                            }
                             while (matcher.find()) {
-                                String spName = matcher.group(1) + matcher.group(2) + matcher.group(3);
-                                Double spPrice = Double.valueOf(matcher.group(5));
-                                String spUrl = matcher.group(4);
-                                logger.debug(spName);
-                                logger.debug(spPrice + "");
-                                logger.debug(spUrl);
-                                // 使用该商品的全称按销量搜索，分析第一页商品的信息，判断该商品是否可用
-                                Boolean isUsable = compareSp(spName, spPrice);
-                                if (isUsable) {
-                                    // 获取此店铺的商品URL
-                                    spUrlList_temp.add("https://" + spUrl);
-                                } else {
-                                    logger.info("该链接被舍弃 https://{}", spUrl);
-                                    failNo_reality++;
-                                    /*if (failNo_reality >= failNo) {
-                                        isBreak = true;
-                                        break;
-                                    }*/
-                                }
+                                // 剔除高亮标签
+                                String spName = matcher.group(1).replaceAll("<spanclass=H>","").replaceAll("</span>","");
+                                String spUrl = matcher.group(2);
+                                String spPrice = matcher.group(3);
+                                Map<String,String> spInfoMap = new HashMap<>();
+                                spInfoMap.put("spName",spName);
+                                spInfoMap.put("spUrl",spUrl);
+                                spInfoMap.put("spPrice",spPrice);
+                                spInfoList.add(spInfoMap);
                             }
                         }
                     }
@@ -288,15 +274,33 @@ public class Main {
                     if (response != null) {
                         response.close();
                     }
+                }// end 页数循环查询结束
+
+                // 根据spInfoList.size计算出店铺的舍弃阈值，并对list中的商品进行排查
+                Integer failNo = 0;//当商品排除数量达到该值时，该店铺被排除
+                Integer failNo_reality = 0;//实际已经排除的值
+                failNo = spInfoList.size() * failPercent / 100;
+                Iterator<Map<String, String>> iterator = spInfoList.iterator();
+                while (iterator.hasNext()) {
+                    Map<String, String> spInfoMap = iterator.next();
+                    if(!compareSp(spInfoMap.get("spName"),Double.valueOf(spInfoMap.get("spPrice")))) {
+                        iterator.remove();
+                        failNo_reality++;
+                        if(failNo_reality >=failNo) {
+                            break;
+                        }
+                    }
                 }
 
-                spUrlList.addAll(spUrlList_temp);// 将本店查询到的所有商品链接加入总商品链接集合
-
-                logger.debug("店铺链接{} 店铺搜索关键词{} 价格范围{}-{} 实际搜索页数:{} 累计共找到{}个商品链接", twoUrl, twoKeyword, minPrice, maxPrice, allPageNo, spUrlList.size());
+                // 店铺合规就把排查通过的商品信息List加入总的List。
+                if(failNo_reality < failNo) {
+                    spInfoList_all.addAll(spInfoList);// 将本店查询到的所有商品链接加入总商品链接集合
+                }
+                logger.debug("店铺链接{} 店铺搜索关键词{} 价格范围{}-{} 实际搜索页数:{} 累计共找到{}个商品链接", twoUrl, twoKeyword, minPrice, maxPrice, realityPageNo, this.spInfoList_all.size());
             }
 
-            for (String spUrl : spUrlList) {
-                logger.info(spUrl);
+            for (Map<String,String> spInfoMap : spInfoList_all) {
+                logger.info(spInfoMap.get("spUrl"));
             }
             // ---END 页数for循环
         } catch (Exception e) {
@@ -345,12 +349,15 @@ public class Main {
                     }*/
 
                     // 查询到的商品有3个就通过
-                    Matcher matcher = Pattern.compile("raw_title").matcher(bodyString);
+                    Matcher matcher = Pattern.compile("raw_title\":\"(\\S+?)\"").matcher(bodyString);
                     int count = 0;
                     while (matcher.find()) {
-                        count++;
-                        if (count >= passNo) {
-                            break;
+                        String group = matcher.group(1);
+                        if (spName.equals(group)) {
+                            count++;
+                            if (count >= passNo) {
+                                break;
+                            }
                         }
                     }
                     if (count >= passNo) {
@@ -455,7 +462,7 @@ public class Main {
         Map<String, String> map = new HashMap<>();
         map.put("q", URLDecoder.decode(spName, "gb2312"));
         map.put("sort", threeSort);
-        map.put("filter", "reserve_price%5B" + spPrice_multiple + "%2C" + spPrice_multiple * 10 + "%5D");
+        map.put("data-value", "reserve_price%255B"+ spPrice_multiple + "%252C"+ spPrice_multiple * 10 + "%255D");
         return addOrReplaceUrlParam(url, map);
     }
 
